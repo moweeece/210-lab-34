@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <stack>
 #include <queue>
+#include <limits>
 using namespace std;
 
 const int SIZE = 9;
@@ -148,6 +149,55 @@ public:
         }
         cout << endl;
     }
+
+    void shortestPath(int start)
+    {
+        vector<string> stationNames = {
+            "Central Hub", "Residential Zone", "Business District", "University", "Shopping Center",
+            "Suburban Terminal", "Industrial Park", "Airport", "Stadium"
+        };
+
+        // priority queue to store distance, vertex
+        priority_queue<Pair, vector<Pair>, greater<Pair>> priorityq;
+
+        // Initialize distance of all vertices as infinity
+        vector<int> dist(SIZE, numeric_limits<int>::max());
+
+        // add source vertex to priority queue
+        priorityq.push({0, start});
+
+        // initialize distance to 0
+        dist[start] = 0;
+
+        // loop until queue is empty
+        while(!priorityq.empty())
+        {
+            int u = priorityq.top().second;
+            // remove element
+            priorityq.pop();
+        
+            // check neighboring nodes
+            for (auto &neighbor : adjList[u])
+            {
+                int v = neighbor.first;
+                int weight = neighbor.second;
+            
+                // if a shorter path is found
+                if (dist[u] + weight < dist[v])
+                {
+                    dist[v] = dist[u] + weight;
+                    priorityq.push({dist[v], v});
+                }
+            }
+        }
+
+        cout << "Shortest path from node " << start << ":\n";
+        for (int i = 0; i < SIZE; i++)
+        {
+            cout << start << " -> " << i << " : " << dist[i] << endl;
+        }
+        cout << endl;
+    }
 };
 
 
@@ -169,6 +219,9 @@ int main() {
 
     // Breadth First Search
     graph.BFS(0);
+
+    // shortest path calc
+    graph.shortestPath(0);
 
     return 0;
 }
