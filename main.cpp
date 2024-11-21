@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <unordered_set>
 #include <stack>
 #include <queue>
@@ -41,22 +42,39 @@ public:
 
     // Print the graph's adjacency list
     void printGraph() {
-        cout << "Graph's adjacency list:" << endl;
+        cout << "City Transit Network Map:\n";
+        cout << "=========================\n";
+
+        vector<string> stationNames = {
+            "Central Hub", "Residential Zone", "Business District", "University", "Shopping Center",
+            "Suburban Terminal", "Industrial Park", "Airport", "Stadium"
+        };
+
         for (int i = 0; i < adjList.size(); i++) {
-            cout << i << " --> ";
-            for (Pair v : adjList[i])
-                cout << "(" << v.first << ", " << v.second << ") ";
-            cout << endl;
+            cout << "Station " << i << " (" << stationNames[i] << ") connects to:\n";
+            for (Pair v : adjList[i]) {
+                cout << "-> Station " << v.first << " (" << stationNames[v.first] 
+                << ") - Distance: " << v.second << " km\n";
+            }
         }
+        cout << endl;
     }
 
     // Depth First Search
     void DFS(int start) {
+        vector<string> stationNames = {
+            "Central Hub", "Residential Zone", "Business District", "University", "Shopping Center",
+            "Suburban Terminal", "Industrial Park", "Airport", "Stadium"
+        };
+
         unordered_set<int> visited;     // set to track visited vertices
         stack<int> stack;               // initialize the stack for the DFS
         stack.push(start);              // push the starting vertex onto the stack
 
-        cout << "DFS starting from vertex " << start << ": " << endl;
+        cout << "Transit Analysis (DFS) from Station " << start << " (" << stationNames[start] << "):\n";
+        cout << "Purpose: Determining potential alternative route during service interuptions\n";
+        cout << "============================================================================\n";
+
         // while the stack is not empty
         while(!stack.empty())
         {
@@ -68,18 +86,21 @@ public:
             // if the vertex has not been visited before
             if (visited.find(vertex) == visited.end())
             {
-                cout << vertex << " ";
+                cout << "Inspection Station " << vertex << " (" << stationNames[vertex] << " )\n";
                 visited.insert(vertex);
-            }
 
-            // push all unvisited adjacent nodes onto the stack
-            for (auto &adjacent : adjList[vertex])
-            {
-                if (visited.find(adjacent.first) == visited.end())
+                // push all unvisited adjacent nodes onto the stack
+                for (auto &adjacent : adjList[vertex])
                 {
-                    stack.push(adjacent.first);
+                    if (visited.find(adjacent.first) == visited.end())
+                    {
+                        cout << "  -> Exploring route to Station " << adjacent.first << " ("
+                        << stationNames[adjacent.first] << ") - Distance: " << adjacent.second << " km\n";
+
+                        stack.push(adjacent.first);
+                    }
+                        
                 }
-                    
             }
         }
         cout << endl;
@@ -87,12 +108,20 @@ public:
 
     // Breadth First Search
     void BFS(int start) {
+        vector<string> stationNames = {
+            "Central Hub", "Residential Zone", "Business District", "University", "Shopping Center",
+            "Suburban Terminal", "Industrial Park", "Airport", "Stadium"
+        };
+
         unordered_set<int> visited;     // set to track visited vertices
         queue<int> queue;               // initialize the stack for the DFS
         queue.push(start);              // push the starting vertex onto the stack
         visited.insert(start);          // starting vertex is marked as visited
 
-        cout << "BFS starting from vertex " << start << ": " << endl;
+        cout << "Transit Inspection (BFS) from Station " << start << " (" << stationNames[start] << ")\n";
+        cout << "Purpose: Evaluating station by distance from the starting point\n";
+        cout << "===============================================================\n";
+
         // while the queue is not empty
         while(!queue.empty())
         {
@@ -102,13 +131,16 @@ public:
             queue.pop();
 
             // print the first vertex
-            cout << vertex << " ";
+            cout << "Checking Station " << vertex << " (" << stationNames[vertex] << ")\n";
 
             // push all unvisited adjacent nodes onto the stack
             for (auto &neighbor : adjList[vertex])
             {
                 if (visited.find(neighbor.first) == visited.end())
                 {
+                    cout << "  -> Accessible Station " << neighbor.first << " (" << stationNames[neighbor.first] 
+                    << ") - Distance: " << neighbor.second << " km\n";
+                    
                     visited.insert(neighbor.first);
                     queue.push(neighbor.first);
                 }
