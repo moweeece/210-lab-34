@@ -198,6 +198,76 @@ public:
         }
         cout << endl;
     }
+
+    void minimumSpanningTree() 
+    {
+       vector<string> stationNames = {
+            "Central Hub", "Residential Zone", "Business District", "University", "Shopping Center",
+            "Suburban Terminal", "Industrial Park", "Airport", "Stadium"
+        }; 
+
+        // priority queue to store distance, vertex
+        priority_queue<Pair, vector<Pair>, greater<Pair>> priorityqMst;
+        
+        // vector to keep track of visited nodes
+        vector<bool> visited(SIZE, false);
+
+        // starting from node 0
+        int startMst = 0;
+        visited[startMst] = true;
+
+        // Adding all edges beginning from the starting node
+        for (auto &edge : adjList[startMst])
+        {
+            // push weight and destination
+            priorityqMst.push({edge.second, edge.first});
+        }
+
+        cout << "Minimum Spanning Tree edges:\n";
+        cout << "============================\n";
+
+        vector<pair<int, int>> mstEdges;
+
+        // while the queue is not empty
+        while (!priorityqMst.empty())
+        {
+            // get smallest weight edge
+            auto[weight, vertex] = priorityqMst.top();
+            priorityqMst.pop();
+
+            // skip an already visited vertex
+            if(visited[vertex]) continue;
+
+            // if not visited, then mark the vertex as visited
+            visited[vertex] = true;
+
+            // find a connecting node
+            for (int u = 0; u < SIZE; u++)
+            {
+                for(auto &edge : adjList[u])
+                {
+                    if(edge.first == vertex && visited[u])
+                    {
+                        mstEdges.push_back({u, vertex});
+                        cout << "Edge from " << u << " to " << vertex
+                        << " with capacity: " << weight << " units\n";
+                        break;
+                    }
+                }
+            }
+
+            // add unvisited adjacent edges to the queue
+            for (auto &edge : adjList[vertex])
+            {
+                if(!visited[edge.first])
+                {
+                    priorityqMst.push({edge.second, edge.first});
+                }
+            }
+        }
+    }
+
+
 };
 
 
@@ -222,6 +292,9 @@ int main() {
 
     // shortest path calc
     graph.shortestPath(0);
+
+    // Minimum Spanning Tree
+    graph.minimumSpanningTree();
 
     return 0;
 }

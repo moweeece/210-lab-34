@@ -5,6 +5,7 @@
         "stack": "cpp",
         "unordered_set": "cpp",
         "vector": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "xstring": "cpp"
     }
 }
