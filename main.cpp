@@ -265,6 +265,7 @@ public:
                 }
             }
         }
+        cout << endl;
     }
 
 
@@ -281,20 +282,54 @@ int main() {
     // Creates graph
     Graph graph(edges);
 
-    // Prints adjacency list representation of graph
-    graph.printGraph();
+    while(true)
+    {
+        int userChoice;
 
-    // Depth First Search
-    graph.DFS(0);
+        cout << "City Transit System Menu:\n";
+        cout << "=========================\n";
+        cout << "[1] Display Network Map\n";
+        cout << "[2] Perform Depth First Search (DFS)\n";
+        cout << "[3] Perform Breadth First Search (BFS)\n";
+        cout << "[4] Display Shortest Path\n";
+        cout << "[5] Calculate Minimum Spanning Tree\n";
+        cout << "[6] Exit\n";
+        cout << "Enter your choice: ";
+        cin >> userChoice;
 
-    // Breadth First Search
-    graph.BFS(0);
+        switch (userChoice) 
+        {
+            case 1:
+                // Prints adjacency list representation of graph
+                graph.printGraph();
+                break;
+            case 2:
+                // Depth First Search
+                graph.DFS(0);
+                break;
 
-    // shortest path calc
-    graph.shortestPath(0);
+            case 3:
+                // Breadth First Search
+                graph.BFS(0);
+                break;
+            
+            case 4:
+                // shortest path calc
+                graph.shortestPath(0);
+                break;
+            
+            case 5:
+                // Minimum Spanning Tree
+                graph.minimumSpanningTree();
+                break;
 
-    // Minimum Spanning Tree
-    graph.minimumSpanningTree();
+            case 6:
+                cout << "Exiting the program.\n";
+                return 0;
 
-    return 0;
+            default:
+                cout << "Invalid selection.\n";
+        }
+    }
+
 }
